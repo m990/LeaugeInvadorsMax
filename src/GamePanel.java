@@ -23,6 +23,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		timer.start();
 	}
 	public void paintComponent(Graphics g){
+		gameObject.draw(g);
 	}
 	@Override
 	public void keyTyped(KeyEvent e) {
