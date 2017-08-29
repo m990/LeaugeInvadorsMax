@@ -18,12 +18,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Font titleFont;
 	Font buttonFont;
 	Font startOver;
-	RocketShip rocketShip = new RocketShip();
+	RocketShip rocketShip = new RocketShip(250, 700, 50, 50);
+	ObjectManager manager;
 	
 	void updateMenuState() {
-		
 	}
 	void updateGameState() {
+		rocketShip.update();
+		for(int i = 0; i < manager.objects.size(); i++) {
+			GameObject o1 = manager.objects.get(i);
+			o1.update();
+		}
 	}
 	void updateEndState() {
 		
@@ -41,11 +46,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Press Enter to start", 50, 300);
 	}
 	void drawGameState(Graphics g) {
-		rocketShip.draw(g);
-	}
-	void drawEndState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
+		rocketShip.draw(g);
+		manager.draw(g);
+	}
+	void drawEndState(Graphics g) {
 		g.setFont(titleFont); 
 		g.setColor(Color.GREEN);
 		g.drawString("Game over", 75, 175);
@@ -74,6 +80,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		titleFont = new Font("Arial", Font.BOLD, 45);
 		buttonFont = new Font("Arial", Font.PLAIN, 48);
 		startOver = new Font("Arial", Font.PLAIN, 40);
+		manager = new ObjectManager();
+		manager.addObject(rocketShip); 
 	}
 	
 	
@@ -100,11 +108,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			System.out.println("Left pressed");
+			rocketShip.x -= 5;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			System.out.println("Right pressed");
+			rocketShip.x += 5;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if(currentState == END_STATE){
 				currentState = MENU_STATE;
 			}
@@ -116,6 +126,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 
 		}
+		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			manager.addObject(new Projectile(rocketShip.x, rocketShip.y, 10, 10));
+			System.out.println(rocketShip.y + rocketShip.x);
+		}
+		
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {

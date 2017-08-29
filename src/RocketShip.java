@@ -3,11 +3,12 @@ import java.awt.Graphics;
 
 public class RocketShip extends GameObject {
 	int speed;
-	public RocketShip() {
-		x = 270;
+	public RocketShip(int x, int y, int width, int height) {
+		super(x, y, width, height);
+		/*x = 270;
 		y = 200;
 		width = 50;
-		height = 50;
+		height = 50;*/
 		speed = 5;
 	}
 	void update() {
