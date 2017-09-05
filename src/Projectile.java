@@ -12,6 +12,7 @@ public class Projectile extends GameObject {
 		speed = 10;
 	}
 	void update() {
+		super.update();
 		y -= speed;
 		if (y < 0) {
 			isAlive = false;
@@ -19,9 +20,7 @@ public class Projectile extends GameObject {
 		System.out.println("Updating");
 	}
 	void draw(Graphics g) {
-		g.setColor(Color.RED);
-		g.fillRect(x, y, width, height);
-		//System.out.println(y);
+		g.drawImage(GamePanel.bulletImg, x, y, width, height, null);
 
 	}
 }

@@ -5,7 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -20,18 +24,26 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Font startOver;
 	RocketShip rocketShip = new RocketShip(250, 700, 50, 50);
 	ObjectManager manager;
+	public static BufferedImage alienImg;
+	public static BufferedImage rocketImg;
+	public static BufferedImage bulletImg;
 	
 	void updateMenuState() {
 	}
 	void updateGameState() {
-		rocketShip.update();
-		for(int i = 0; i < manager.objects.size(); i++) {
-			GameObject o1 = manager.objects.get(i);
-			o1.update();
+		manager.update();
+		manager.manageEnemies();
+		manager.checkCollision();
+		if (rocketShip.isAlive == false){
+			currentState = END_STATE;
+			manager.reset();
+			rocketShip = new RocketShip(250, 700, 50, 50);
+			manager.addObject(rocketShip);
 		}
+		manager.getScore();
 	}
 	void updateEndState() {
-		
+		manager.getScore();
 	}
 	
 	
@@ -81,7 +93,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		buttonFont = new Font("Arial", Font.PLAIN, 48);
 		startOver = new Font("Arial", Font.PLAIN, 40);
 		manager = new ObjectManager();
-		manager.addObject(rocketShip); 
+		manager.addObject(rocketShip);
+		try {
+			alienImg = ImageIO.read(this.getClass().getResourceAsStream("alien.png"));
+			rocketImg = ImageIO.read(this.getClass().getResourceAsStream("rocket.png"));
+			bulletImg = ImageIO.read(this.getClass().getResourceAsStream("bullet.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "IOException");
+		}
+
 	}
 	
 	
@@ -102,17 +123,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-	}
+	}	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			System.out.println("Left pressed");
-			rocketShip.x -= 5;
+			rocketShip.x -= 15;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			System.out.println("Right pressed");
-			rocketShip.x += 5;
+			rocketShip.x += 15	;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if(currentState == END_STATE){
@@ -127,7 +148,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			manager.addObject(new Projectile(rocketShip.x, rocketShip.y, 10, 10));
+			manager.addObject(new Projectile(rocketShip.x + 20, rocketShip.y, 10, 10));
 			System.out.println(rocketShip.y + rocketShip.x);
 		}
 		

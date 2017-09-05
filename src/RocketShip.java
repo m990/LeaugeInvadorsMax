@@ -9,14 +9,12 @@ public class RocketShip extends GameObject {
 		y = 200;
 		width = 50;
 		height = 50;*/
-		speed = 5;
+		//speed = 5;
 	}
 	void update() {
-		
+		super.update();
 	}
 	void draw(Graphics g) {
-		g.setColor(Color.BLUE);
-		g.fillRect(x, y, width, height);
-
+		g.drawImage(GamePanel.rocketImg, x, y, width, height, null);
 	}
 }
