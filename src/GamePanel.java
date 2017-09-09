@@ -46,6 +46,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		manager.getScore();
 	}
 	
+	int getScore(){
+		return manager.getScore();
+	}
 	
 	void drawMenuState(Graphics g) {
 		g.setColor(Color.BLUE);
@@ -69,6 +72,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.drawString("Game over", 75, 175);
 		g.setFont(startOver);
 		g.drawString("Press enter to play again", 10, 300);
+		g.drawString("Score: " + getScore(), 50, 50);
 	}
 	
 	@Override
